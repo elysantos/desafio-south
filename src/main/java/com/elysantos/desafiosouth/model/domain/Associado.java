@@ -1,9 +1,17 @@
 package com.elysantos.desafiosouth.model.domain;
 
-public class Associado {
-  private String cpf;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-  public String getCpf() {
-    return cpf;
-  }
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Associado {
+  private UUID   id;
+  private String cpf;
+  private AssociadoEnabled associadoEnabled;
 }

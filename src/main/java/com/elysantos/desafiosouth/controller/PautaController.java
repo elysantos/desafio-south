@@ -1,15 +1,15 @@
 package com.elysantos.desafiosouth.controller;
 
 import com.elysantos.desafiosouth.model.domain.Pauta;
+import com.elysantos.desafiosouth.model.exception.ItemNaoEncontradoException;
 import com.elysantos.desafiosouth.model.presentation.PautaRequest;
 import com.elysantos.desafiosouth.model.presentation.PautaResponse;
-import com.elysantos.desafiosouth.model.exception.ItemNaoEncontradoException;
 import com.elysantos.desafiosouth.service.PautaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,7 +59,8 @@ public class PautaController {
   @Operation(summary = "Listar todos")
   @GetMapping(produces = "application/json")
   public ResponseEntity<List<PautaResponse>> listAll() {
-    return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+    List<PautaResponse> responses = pautaService.listar().stream().map(PautaResponse::new).collect(Collectors.toList());
+    return new ResponseEntity<>(responses, HttpStatus.OK);
   }
 
   @Operation(summary = "Apagar caso encontre item com ID especificado")

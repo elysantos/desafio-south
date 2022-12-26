@@ -10,14 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SessaoRepository {
   void insert(@Param("sessao") Sessao sessao);
-
   void update(@Param("id") String id, @Param("sessao") Sessao sessao);
-
   void delete(@Param("id") String id);
-
   List<Sessao> findAll();
-
   Sessao findById(@Param("id") Integer id);
 
-  boolean findVoto(String cpf, Integer sessao);
+
+  List<Sessao> findByStatusNotClosedAndVotingClosed();
 }

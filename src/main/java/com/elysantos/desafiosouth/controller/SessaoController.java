@@ -2,15 +2,16 @@ package com.elysantos.desafiosouth.controller;
 
 import com.elysantos.desafiosouth.model.domain.Sessao;
 import com.elysantos.desafiosouth.model.domain.ValorVoto;
+import com.elysantos.desafiosouth.model.exception.ItemDuplicatedException;
 import com.elysantos.desafiosouth.model.exception.ItemNaoEncontradoException;
-import com.elysantos.desafiosouth.model.exception.VotoRepetidoException;
+import com.elysantos.desafiosouth.model.exception.VotoNaoAceitoException;
 import com.elysantos.desafiosouth.model.presentation.SessaoRequest;
 import com.elysantos.desafiosouth.model.presentation.SessaoResponse;
 import com.elysantos.desafiosouth.service.SessaoService;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,7 +33,7 @@ public class SessaoController {
 
   @Operation(summary = "Criar nova sessao")
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<SessaoResponse> create(@RequestBody SessaoRequest request) {
+  public ResponseEntity<SessaoResponse> create(@RequestBody SessaoRequest request) throws ItemDuplicatedException {
     SessaoResponse response = new SessaoResponse(sessaoService.createSession(request.toDomain()));
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
@@ -47,14 +48,17 @@ public class SessaoController {
   @Operation(summary = "Listar todos")
   @GetMapping(produces = "application/json")
   public ResponseEntity<List<SessaoResponse>> listAll() {
-    return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+    List<SessaoResponse> responses =
+        sessaoService.listar().stream()
+            .map(SessaoResponse::new).collect(Collectors.toList());
+    return new ResponseEntity<>(responses, HttpStatus.OK);
   }
 
   @Operation(summary = "Computar voto a sessao")
   @PostMapping(value = "/{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> votar(@PathVariable("id") Integer id,
                                       @RequestParam("associado") String cpfAssociado,
-                                      @RequestParam("voto") String voto ) throws VotoRepetidoException {
+                                      @RequestParam("voto") String voto ) throws VotoNaoAceitoException, ItemNaoEncontradoException {
     UUID uuidVote = sessaoService.computeVote(cpfAssociado, id, ValorVoto.valueOf(voto));
     return ResponseEntity.ok(uuidVote.toString());
   }
