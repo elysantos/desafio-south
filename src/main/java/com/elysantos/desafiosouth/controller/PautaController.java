@@ -38,7 +38,8 @@ public class PautaController {
       @ApiResponse(responseCode = "500", description = "Internal server error")})
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PautaResponse> create(@RequestBody PautaRequest pautaRequest) throws ItemDuplicatedException {
-   PautaResponse response = new PautaResponse(pautaService.criar(pautaRequest.toDomain()));
+    Pauta pauta = pautaService.criar(pautaRequest.toDomain());
+    PautaResponse response = new PautaResponse(pauta);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 

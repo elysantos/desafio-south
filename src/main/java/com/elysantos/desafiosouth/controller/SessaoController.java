@@ -59,7 +59,7 @@ public class SessaoController {
   @PostMapping(value = "/{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> votar(@PathVariable("id") Integer id,
                                       @RequestParam("associado") String cpfAssociado,
-                                      @RequestParam("voto") String voto ) throws VotoNaoAceitoException, ItemNaoEncontradoException {
+                                      @RequestParam("voto") String voto) throws VotoNaoAceitoException, ItemNaoEncontradoException {
     UUID uuidVote = sessaoService.computeVote(cpfAssociado, id, ValorVoto.valueOf(voto));
     return ResponseEntity.ok(uuidVote.toString());
   }

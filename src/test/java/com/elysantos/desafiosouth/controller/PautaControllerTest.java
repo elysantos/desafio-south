@@ -5,12 +5,13 @@ import com.elysantos.desafiosouth.model.presentation.PautaRequest;
 import com.elysantos.desafiosouth.model.presentation.PautaResponse;
 import com.elysantos.desafiosouth.service.PautaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -21,13 +22,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PautaControllerTest {
-  private MockMvc         mockMvc;
-  private ObjectMapper    objectMapper;
-  private PautaService    pautaService;
-  private static final String ENDPOINT = "/products";
-  private static final String CONTENT_TYPE = "application/json";
+  private              MockMvc      mockMvc;
+  private              ObjectMapper objectMapper;
+  private              PautaService pautaService;
+  private static final String       ENDPOINT     = "/pautas";
+  private static final String       CONTENT_TYPE = "application/json";
 
-  @BeforeAll
+  @BeforeEach
   void setUp() {
     pautaService = mock(PautaService.class);
     objectMapper = new ObjectMapper();
@@ -39,18 +40,21 @@ class PautaControllerTest {
 
   @Test
   void testCreateASuccessfulPauta() throws Exception {
-    PautaRequest pautaRequest = new PautaRequest();
+    PautaRequest request = new PautaRequest();
+    request.setTitle("pauta titulo");
 
-    when(pautaService.criar(any(Pauta.class))).thenReturn(new Pauta());
+    when(pautaService.criar(any(Pauta.class))).thenReturn(new Pauta(request.getTitle()));
 
     MvcResult mvcResult = mockMvc.perform(post(ENDPOINT)
         .contentType(CONTENT_TYPE)
-        .content(objectMapper.writeValueAsString(pautaRequest))
+        .content(objectMapper.writeValueAsString(request))
     ).andExpect(status().isCreated()).andReturn();
 
-    PautaResponse response = (PautaResponse) mvcResult.getAsyncResult();
+    PautaResponse response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+        PautaResponse.class);
 
     assertNotNull(response.getId());
+    assertEquals(response.getTitle(), request.getTitle());
 
     verify(pautaService, times(1)).criar(any());
   }

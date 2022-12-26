@@ -23,10 +23,10 @@ public class Sessao {
   public Sessao(String inicio, Integer duracao, String idPauta) throws IllegalArgumentException {
     LocalDateTime dtInicio = LocalDateTime.now();
     if(!inicio.isEmpty()){
-      dtInicio = LocalDateTime.parse(inicio, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+      dtInicio = LocalDateTime.parse(inicio, DateTimeFormatter.ISO_DATE_TIME);
     }
     this.dateTimeInicio = dtInicio;
-    this.duracao = (duracao <= 0 ) ? 1: duracao;
+    this.duracao = (duracao != null && duracao > 0 ) ? duracao: 1;
 
     this.pauta = new Pauta();
     pauta.setId(UUID.fromString(idPauta));
