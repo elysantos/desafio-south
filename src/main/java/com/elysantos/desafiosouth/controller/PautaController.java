@@ -1,6 +1,7 @@
 package com.elysantos.desafiosouth.controller;
 
 import com.elysantos.desafiosouth.model.domain.Pauta;
+import com.elysantos.desafiosouth.model.exception.ItemDuplicatedException;
 import com.elysantos.desafiosouth.model.exception.ItemNaoEncontradoException;
 import com.elysantos.desafiosouth.model.presentation.PautaRequest;
 import com.elysantos.desafiosouth.model.presentation.PautaResponse;
@@ -36,9 +37,9 @@ public class PautaController {
       @ApiResponse(responseCode = "400", description = "Unable to create "),
       @ApiResponse(responseCode = "500", description = "Internal server error")})
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<PautaRequest> create(@RequestBody PautaRequest pautaRequest) {
-    Pauta pautaCreated = pautaService.criar(pautaRequest.toDomain());
-    return new ResponseEntity<>(PautaRequest.fromDomain(pautaCreated), HttpStatus.CREATED);
+  public ResponseEntity<PautaResponse> create(@RequestBody PautaRequest pautaRequest) throws ItemDuplicatedException {
+   PautaResponse response = new PautaResponse(pautaService.criar(pautaRequest.toDomain()));
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @Operation(summary = "Atualizar pauta")
@@ -50,7 +51,7 @@ public class PautaController {
 
   @Operation(summary = "Obter a partir de ID")
   @GetMapping(value = "/{id}", produces = "application/json")
-  public ResponseEntity<PautaResponse> getOne(@PathVariable("id") Integer id) throws ItemNaoEncontradoException {
+  public ResponseEntity<PautaResponse> getOne(@PathVariable("id") String id) throws ItemNaoEncontradoException {
     Pauta pauta = pautaService.obter(id);
     return new ResponseEntity<>(new PautaResponse(pauta), HttpStatus.OK);
   }
@@ -65,7 +66,7 @@ public class PautaController {
 
   @Operation(summary = "Apagar caso encontre item com ID especificado")
   @DeleteMapping(value = "{id}", produces = "application/json")
-  public ResponseEntity<PautaResponse> delete(@PathVariable("id") Integer id) throws ItemNaoEncontradoException {
+  public ResponseEntity<PautaResponse> delete(@PathVariable("id") String id) throws ItemNaoEncontradoException {
     Pauta pauta = pautaService.apagar(id);
     return new ResponseEntity<>(new PautaResponse(pauta), HttpStatus.OK);
   }

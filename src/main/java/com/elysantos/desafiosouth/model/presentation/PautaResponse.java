@@ -11,10 +11,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PautaResponse {
-  private Integer id;
+  private String id;
   private String title;
 
   public PautaResponse(Pauta pauta){
+    this.id =  pauta.getId().toString();
     this.title = pauta.getTitulo();
   }
 }

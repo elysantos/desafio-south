@@ -1,31 +1,36 @@
 package com.elysantos.desafiosouth.model.domain;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Sessao {
   private UUID id;
   private List<Voto> votos;
 
   private Pauta pauta;
-  private Integer duracao = 1;
+  private Integer duracao;
   private LocalDateTime dateTimeInicio;
 
   private ResultadoVotacao resultadoVotacao = new ResultadoVotacao();
 
-  public Sessao(LocalDateTime dtInicio) {
+  public Sessao(String inicio, Integer duracao, String idPauta) throws IllegalArgumentException {
+    LocalDateTime dtInicio = LocalDateTime.now();
+    if(!inicio.isEmpty()){
+      dtInicio = LocalDateTime.parse(inicio, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+    }
     this.dateTimeInicio = dtInicio;
-  }
+    this.duracao = (duracao <= 0 ) ? 1: duracao;
 
-  public Sessao(LocalDateTime dtInicio, Integer duracao) {
-    this.dateTimeInicio = dtInicio;
-    this.duracao = duracao;
+    this.pauta = new Pauta();
+    pauta.setId(UUID.fromString(idPauta));
+
   }
 
   public void gerarUUID() {

@@ -16,7 +16,4 @@ public class Pauta {
     this.titulo = titulo;
   }
 
-  public String getTitulo() {
-    return titulo;
-  }
 }

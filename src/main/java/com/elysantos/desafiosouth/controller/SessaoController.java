@@ -2,6 +2,7 @@ package com.elysantos.desafiosouth.controller;
 
 import com.elysantos.desafiosouth.model.domain.Sessao;
 import com.elysantos.desafiosouth.model.domain.ValorVoto;
+import com.elysantos.desafiosouth.model.exception.FormatoIncorretoException;
 import com.elysantos.desafiosouth.model.exception.ItemDuplicatedException;
 import com.elysantos.desafiosouth.model.exception.ItemNaoEncontradoException;
 import com.elysantos.desafiosouth.model.exception.VotoNaoAceitoException;
@@ -33,7 +34,7 @@ public class SessaoController {
 
   @Operation(summary = "Criar nova sessao")
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<SessaoResponse> create(@RequestBody SessaoRequest request) throws ItemDuplicatedException {
+  public ResponseEntity<SessaoResponse> create(@RequestBody SessaoRequest request) throws ItemDuplicatedException, FormatoIncorretoException {
     SessaoResponse response = new SessaoResponse(sessaoService.createSession(request.toDomain()));
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }

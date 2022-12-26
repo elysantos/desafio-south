@@ -23,7 +23,7 @@ public class SessionNotificationTask {
   private final KafkaTemplate<String, String> kafkaTemplate;
   private final String topicName;
 
-  @Scheduled(cron = "0 0/1 * * * *")
+  @Scheduled(cron = "5 0/1 * * * *")
   private void run() {
     List<Sessao> sessoesFechadas = sessaoRepository.findByStatusNotClosedAndVotingClosed();
     sessoesFechadas.forEach(sessao -> {

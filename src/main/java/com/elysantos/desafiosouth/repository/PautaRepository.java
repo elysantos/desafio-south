@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface PautaRepository {
-  void delete(@Param("id") Integer id);
+  void delete(@Param("id") String id);
 
   void insert(@Param("pauta")Pauta pauta);
 
-  void update(@Param("id") Integer id, @Param("pauta") Pauta pauta);
+  void update(@Param("id") String id, @Param("pauta") Pauta pauta);
 
   List<Pauta> findAll();
 
-  Pauta findById(@Param("id") Integer id);
+  Pauta findById(@Param("id") String id);
 }

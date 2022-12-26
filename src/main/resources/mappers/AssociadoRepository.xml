@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.elysantos.desafiosouth.repository.AssociadoRepository">
-    <insert id="insert"></insert>
-    <select id="findByCPF" resultType="com.elysantos.desafiosouth.model.domain.Associado"></select>
+    <insert id="insert">
+        insert into associados(id, cpf, status) values ('#{associado.id}', '#{associado.cpf}', '#{associado.status}')
+    </insert>
+    <select id="findByCPF" resultType="com.elysantos.desafiosouth.model.domain.Associado">
+        select id, cpf, status from associados where cpf LIKE '#{cpf}'
+    </select>
 </mapper>
