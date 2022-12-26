@@ -21,13 +21,14 @@ import org.springframework.stereotype.Component;
 public class SessionNotificationTask {
   private final SessaoRepository              sessaoRepository;
   private final KafkaTemplate<String, String> kafkaTemplate;
+  private final String topicName;
 
   @Scheduled(cron = "0 0/1 * * * *")
   private void run() {
     List<Sessao> sessoesFechadas = sessaoRepository.findByStatusNotClosedAndVotingClosed();
     sessoesFechadas.forEach(sessao -> {
       sessao.encerrarVotacao();
-      kafkaTemplate.send("assembleias-resultados", sessao.toMessage());
+      kafkaTemplate.send(topicName, sessao.toMessage());
     });
     log.info("Current time is :: {} | sessoes fechadas {}", LocalDateTime.now(), sessoesFechadas.size());
   }

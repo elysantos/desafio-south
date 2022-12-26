@@ -7,9 +7,12 @@ springdoc:
   title: @name@
 mybatis:
   type-aliases-package: com.elysantos.desafiosouth.model.domain
-  type-handlers-package: com.elysantos.desafiosouth.mapper.typehandler
+  type-handlers-package: com.elysantos.desafiosouth.repository.typehandler
   mapper-locations: classpath*:**/mappers/*.xml
 external-validator: https://user-info.herokyapp.com/users/
+topic:
+  name: assembleias-resultados
+  bootstrap-server: localhost:9092
 ---
 # Configurações de Desenvolvimento
 spring:
