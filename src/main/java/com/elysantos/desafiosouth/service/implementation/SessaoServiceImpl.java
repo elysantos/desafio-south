@@ -30,7 +30,6 @@ public class SessaoServiceImpl implements SessaoService {
 
   @Override
   public Sessao createSession(Sessao sessao) throws ItemDuplicatedException {
-    sessao.gerarUUID();
     try {
       sessaoRepository.insert(sessao);
     } catch (DataIntegrityViolationException dve) {
@@ -73,6 +72,9 @@ public class SessaoServiceImpl implements SessaoService {
     Sessao sessao = sessaoRepository.findById(idSessao);
     if (sessao == null) {
       throw new ItemNaoEncontradoException(String.valueOf(idSessao), TYPE);
+    }
+    if(!sessao.isAberta()){
+      throw new VotoNaoAceitoException("Sessão está fechada");
     }
     Voto voto = new Voto(associado, sessao, valorVoto);
     votoRepository.insert(voto);

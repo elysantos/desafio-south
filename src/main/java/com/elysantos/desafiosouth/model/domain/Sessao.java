@@ -2,6 +2,7 @@ package com.elysantos.desafiosouth.model.domain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import lombok.Data;
 @Data
 public class Sessao {
   private UUID id;
-  private List<Voto> votos;
+  private List<Voto> votos = new ArrayList<>();
 
   private Pauta pauta;
   private Integer duracao;
@@ -22,6 +23,7 @@ public class Sessao {
 
   public static Sessao criarSessao(String inicio, Integer duracao, String idPauta) throws IllegalArgumentException {
     Sessao sessao =  new Sessao();
+    sessao.gerarUUID();
     LocalDateTime dtInicio = LocalDateTime.now();
     if(inicio != null && !inicio.isEmpty()){
       dtInicio = LocalDateTime.parse(inicio, DateTimeFormatter.ISO_DATE_TIME);
@@ -39,6 +41,7 @@ public class Sessao {
   }
 
   public void encerrarVotacao(){
+
     Map<Voto, Long> resultado = votos.stream()
         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     resultado.forEach((k,v) -> {
@@ -50,6 +53,9 @@ public class Sessao {
       }
     });
     this.resultadoVotacao.computar();
+    if(this.dateTimeInicio.plusMinutes(duracao).isAfter(LocalDateTime.now())){
+      this.resultadoVotacao.setStatusVotacao(StatusVotacao.NAO_ENCERRADA);
+    }
   }
 
   public String toMessage(){
@@ -59,5 +65,10 @@ public class Sessao {
         .concat("\nVotos(NAO): ").concat(String.valueOf(resultadoVotacao.getVotosSim()))
         .concat("\nResultado: ").concat(resultadoVotacao.getStatusVotacao().toString());
 
+  }
+
+  public boolean isAberta(){
+    LocalDateTime dataEncerramento = this.dateTimeInicio.plusMinutes(duracao);
+    return dataEncerramento.isAfter(LocalDateTime.now());
   }
 }

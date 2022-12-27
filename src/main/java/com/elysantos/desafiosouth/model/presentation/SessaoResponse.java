@@ -20,10 +20,10 @@ public class SessaoResponse {
 
   public SessaoResponse(Sessao session) {
     this.pauta = new PautaResponse(session.getPauta());
+    session.encerrarVotacao();
     this.resultado = session.getResultadoVotacao();
     this.duracao = session.getDuracao();
     this.id = session.getId().toString();
     this.dtInicio = session.getDateTimeInicio().format(DateTimeFormatter.ISO_DATE_TIME);
-
   }
 }

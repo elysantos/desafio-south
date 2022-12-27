@@ -48,8 +48,9 @@ class SessaoControllerTest {
     request.setInicio(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
     request.setPautaID(UUID.randomUUID().toString());
 
-    when(sessaoService.createSession(any())).thenReturn(new Sessao(request.getInicio(),
-        request.getDuracao(), request.getPautaID()));
+    Sessao sessao = request.toDomain();
+
+    when(sessaoService.createSession(any())).thenReturn(sessao);
 
     MvcResult mvcResult = mockMvc.perform(post(ENDPOINT)
         .contentType(CONTENT_TYPE)
