@@ -20,17 +20,18 @@ public class Sessao {
 
   private ResultadoVotacao resultadoVotacao = new ResultadoVotacao();
 
-  public Sessao(String inicio, Integer duracao, String idPauta) throws IllegalArgumentException {
+  public static Sessao criarSessao(String inicio, Integer duracao, String idPauta) throws IllegalArgumentException {
+    Sessao sessao =  new Sessao();
     LocalDateTime dtInicio = LocalDateTime.now();
-    if(!inicio.isEmpty()){
+    if(inicio != null && !inicio.isEmpty()){
       dtInicio = LocalDateTime.parse(inicio, DateTimeFormatter.ISO_DATE_TIME);
     }
-    this.dateTimeInicio = dtInicio;
-    this.duracao = (duracao != null && duracao > 0 ) ? duracao: 1;
+    sessao.dateTimeInicio = dtInicio;
+    sessao.duracao = (duracao != null && duracao > 0 ) ? duracao: 1;
 
-    this.pauta = new Pauta();
-    pauta.setId(UUID.fromString(idPauta));
-
+    sessao.pauta = new Pauta();
+    sessao.pauta.setId(UUID.fromString(idPauta));
+    return sessao;
   }
 
   public void gerarUUID() {

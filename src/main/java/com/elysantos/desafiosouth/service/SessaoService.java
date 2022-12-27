@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SessaoService {
-  UUID computeVote(String cpf, Integer idSessao, ValorVoto valorVoto) throws VotoNaoAceitoException, ItemNaoEncontradoException;
+  UUID computeVote(String cpf, String idSessao, ValorVoto valorVoto) throws VotoNaoAceitoException, ItemNaoEncontradoException;
 
   Sessao createSession(Sessao sessao) throws ItemDuplicatedException;
   List<Sessao> listar();
-  Sessao obter(Integer id) throws ItemNaoEncontradoException;
+  Sessao obter(String id) throws ItemNaoEncontradoException;
 
 }

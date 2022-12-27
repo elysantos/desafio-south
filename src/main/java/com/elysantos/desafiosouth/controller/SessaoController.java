@@ -41,7 +41,7 @@ public class SessaoController {
 
   @Operation(summary = "Obter a partir de ID")
   @GetMapping(value = "/{id}", produces = "application/json")
-  public ResponseEntity<SessaoResponse> getOne(@PathVariable("id") Integer id) throws ItemNaoEncontradoException {
+  public ResponseEntity<SessaoResponse> getOne(@PathVariable("id") String id) throws ItemNaoEncontradoException {
     Sessao sessao = sessaoService.obter(id);
     return new ResponseEntity<>(new SessaoResponse(sessao), HttpStatus.OK);
   }
@@ -57,10 +57,11 @@ public class SessaoController {
 
   @Operation(summary = "Computar voto a sessao")
   @PostMapping(value = "/{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> votar(@PathVariable("id") Integer id,
+  public ResponseEntity<String> votar(@PathVariable("id") String id,
                                       @RequestParam("associado") String cpfAssociado,
-                                      @RequestParam("voto") String voto) throws VotoNaoAceitoException, ItemNaoEncontradoException {
-    UUID uuidVote = sessaoService.computeVote(cpfAssociado, id, ValorVoto.valueOf(voto));
+                                      @RequestParam("voto") boolean voto) throws VotoNaoAceitoException
+      , ItemNaoEncontradoException {
+    UUID uuidVote = sessaoService.computeVote(cpfAssociado, id, ValorVoto.valueFromBool(voto));
     return ResponseEntity.ok(uuidVote.toString());
   }
 

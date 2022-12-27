@@ -1,7 +1,7 @@
 package com.elysantos.desafiosouth.model.domain;
 
 public enum StatusVotacao {
-  NAO_ENCERRADA(0, "Votação encerrada"),
+  NAO_ENCERRADA(0, "Votação não encerrada"),
   APROVADA(1, "Pauta aprovada"),
   REPROVADA(2, "Pauta reprovada"),
   EMPATE(3, "Pauta com empate");
@@ -20,6 +20,10 @@ public enum StatusVotacao {
       }
     }
     return null;
+  }
+
+  public int getId(){
+    return this.id;
   }
 
   @Override

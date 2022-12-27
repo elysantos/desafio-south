@@ -18,4 +18,15 @@ public enum AssociadoEnabled {
     }
     return null;
   }
+
+  public static AssociadoEnabled valueFromBool(boolean value){
+    if(value){
+      return AssociadoEnabled.ABLE_TO_VOTE;
+    }
+    return AssociadoEnabled.UNABLE_TO_VOTE;
+  }
+
+  public boolean getBoolStatus(){
+    return this == AssociadoEnabled.ABLE_TO_VOTE;
+  }
 }

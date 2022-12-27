@@ -2,9 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.elysantos.desafiosouth.repository.VotoRepository">
     <insert id="insert">
-
+        insert into votos(id, sessao_id, associado_id, valor) values
+                              (#{voto.id}, #{voto.sessao.id},
+                               #{voto.associado.id}, #{voto.valorVoto})
     </insert>
     <select id="findByCpfAndSessao" resultType="java.lang.Boolean">
-
+        select exists(select 1 from votos
+            inner join associados on votos.associado_id = associados.id
+                      where associados.cpf like '${cpf}'
+                        and votos.sessao_id::varchar like '${sessao}')
     </select>
 </mapper>

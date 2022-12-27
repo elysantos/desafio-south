@@ -45,14 +45,16 @@ public class PautaController {
 
   @Operation(summary = "Atualizar pauta")
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<PautaResponse> update(@RequestBody PautaRequest pautaRequest) throws ItemNaoEncontradoException {
-    Pauta pauta = pautaService.atualizar(pautaRequest.toDomain());
+  public ResponseEntity<PautaResponse> update(@PathVariable("id") String id,
+                                              @RequestBody PautaRequest pautaRequest) throws ItemNaoEncontradoException {
+    Pauta pauta = pautaService.atualizar(id, pautaRequest.toDomain());
     return ResponseEntity.accepted().body(new PautaResponse(pauta));
   }
 
   @Operation(summary = "Obter a partir de ID")
   @GetMapping(value = "/{id}", produces = "application/json")
   public ResponseEntity<PautaResponse> getOne(@PathVariable("id") String id) throws ItemNaoEncontradoException {
+
     Pauta pauta = pautaService.obter(id);
     return new ResponseEntity<>(new PautaResponse(pauta), HttpStatus.OK);
   }

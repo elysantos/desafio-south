@@ -7,4 +7,17 @@ public enum ValorVoto {
   ValorVoto(boolean valor) {
     this.valor = valor;
   }
+
+  public static ValorVoto valueFromBool(boolean value){
+    for (ValorVoto valor : ValorVoto.values()) {
+      if (valor.valor == value) {
+        return valor;
+      }
+    }
+    return null;
+  }
+
+  public boolean getValor(){
+    return this.valor;
+  }
 }

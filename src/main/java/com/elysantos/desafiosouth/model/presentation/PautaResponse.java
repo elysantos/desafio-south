@@ -12,10 +12,10 @@ import lombok.Setter;
 @Setter
 public class PautaResponse {
   private String id;
-  private String title;
+  private String titulo;
 
   public PautaResponse(Pauta pauta){
     this.id =  pauta.getId().toString();
-    this.title = pauta.getTitulo();
+    this.titulo = pauta.getTitulo();
   }
 }

@@ -29,6 +29,7 @@ public class SessionNotificationTask {
     sessoesFechadas.forEach(sessao -> {
       sessao.encerrarVotacao();
       kafkaTemplate.send(topicName, sessao.toMessage());
+      sessaoRepository.update(sessao.getId().toString(), sessao);
     });
     log.info("Current time is :: {} | sessoes fechadas {}", LocalDateTime.now(), sessoesFechadas.size());
   }

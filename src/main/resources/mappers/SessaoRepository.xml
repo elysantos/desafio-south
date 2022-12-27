@@ -1,13 +1,102 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.elysantos.desafiosouth.repository.SessaoRepository">
-    <insert id="insert"></insert>
-    <update id="update"></update>
-    <delete id="delete"></delete>
-    <select id="findAll" resultType="com.elysantos.desafiosouth.model.domain.Sessao"></select>
-    <select id="findById" resultType="com.elysantos.desafiosouth.model.domain.Sessao"></select>
-    <select id="findByStatusNotClosedAndVotingClosed"
-            resultType="com.elysantos.desafiosouth.model.domain.Sessao">
+    <resultMap id="sessao" type="com.elysantos.desafiosouth.model.domain.Sessao">
+        <id property="id" column="id"/>
+        <result property="duracao" column="duracao"/>
+        <result property="dateTimeInicio" column="dt_inicio"/>
+        <association property="pauta" resultMap="pauta" columnPrefix="pauta_"/>
+        <association property="resultadoVotacao" resultMap="resultado"/>
+        <collection property="votos" resultMap="voto" columnPrefix="voto_"/>
+    </resultMap>
 
+    <resultMap id="resultado" type="com.elysantos.desafiosouth.model.domain.ResultadoVotacao">
+        <result column="status" property="statusVotacao"/>
+    </resultMap>
+
+    <resultMap id="voto" type="com.elysantos.desafiosouth.model.domain.Voto">
+        <id column="id" property="id"/>
+        <result column="valor" property="valorVoto"/>
+        <association property="associado" resultMap="associado" columnPrefix="associado_"/>
+    </resultMap>
+
+    <resultMap id="associado" type="com.elysantos.desafiosouth.model.domain.Associado">
+        <id column="id" property="id"/>
+        <result column="cpf" property="cpf"/>
+        <result column="enabled" property="associadoEnabled"/>
+    </resultMap>
+
+    <resultMap id="pauta" type="com.elysantos.desafiosouth.model.domain.Pauta">
+        <id property="id" column="id"/>
+        <result property="titulo" column="titulo"/>
+    </resultMap>
+
+    <insert id="insert">
+        insert into sessoes(id, pauta_id, duracao, dt_inicio, status)
+        values (#{sessao.id}, #{sessao.pauta.id}, #{sessao.duracao},
+                #{sessao.dateTimeInicio}, #{sessao.resultadoVotacao.statusVotacao})
+    </insert>
+    <update id="update">
+        update sessoes set status = #{sessao.resultadoVotacao.statusVotacao} where id::varchar= #{id}
+    </update>
+    <delete id="delete">
+        delete
+        from sessoes
+        where id::varchar = #{id}
+    </delete>
+    <select id="findAll" resultMap="sessao">
+        select sessoes.id,
+               duracao,
+               dt_inicio,
+               status,
+               p.id        as pauta_id,
+               p.titulo    as pauta_titulo,
+               votos.id    as voto_id,
+               votos.valor as voto_valor,
+               a.id        as voto_associado_id,
+               a.cpf       as voto_associado_cpf,
+               a.enabled   as voto_associado_enabled
+        from sessoes
+                 inner join pautas p on p.id = sessoes.pauta_id
+                 left join votos on votos.sessao_id = sessoes.id
+                 left join associados a on votos.associado_id = a.id
+    </select>
+    <select id="findById" resultMap="sessao">
+        select sessoes.id,
+               duracao,
+               dt_inicio,
+               status,
+               p.id        as pauta_id,
+               p.titulo    as pauta_titulo,
+               votos.id    as voto_id,
+               votos.valor as voto_valor,
+               a.id        as voto_associado_id,
+               a.cpf       as voto_associado_cpf,
+               a.enabled   as voto_associado_enabled
+        from sessoes
+                 inner join pautas p on p.id = sessoes.pauta_id
+                 left join votos on votos.sessao_id = sessoes.id
+                 left join associados a on votos.associado_id = a.id
+    where sessoes.id::varchar = #{id}
+    </select>
+    <select id="findByStatusNotClosedAndVotingClosed"
+            resultMap="sessao">
+        select sessoes.id,
+               duracao,
+               dt_inicio,
+               status,
+               p.id        as pauta_id,
+               p.titulo    as pauta_titulo,
+               votos.id    as voto_id,
+               votos.valor as voto_valor,
+               a.id        as voto_associado_id,
+               a.cpf       as voto_associado_cpf,
+               a.enabled   as voto_associado_enabled
+        from sessoes
+                 inner join pautas p on p.id = sessoes.pauta_id
+                 left join votos on votos.sessao_id = sessoes.id
+                 left join associados a on votos.associado_id = a.id
+        where sessoes.status  = 0
+          and (sessoes.dt_inicio + (sessoes.duracao * interval '1 minute')) <![CDATA[ <  ]]> now()
     </select>
 </mapper>

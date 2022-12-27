@@ -10,5 +10,5 @@ public interface PautaService {
   Pauta obter(String id) throws ItemNaoEncontradoException;
   Pauta criar(Pauta pauta) throws ItemDuplicatedException;
   Pauta apagar(String id) throws ItemNaoEncontradoException;
-  Pauta atualizar(Pauta pauta) throws ItemNaoEncontradoException;
+  Pauta atualizar(String id, Pauta pauta) throws ItemNaoEncontradoException;
 }

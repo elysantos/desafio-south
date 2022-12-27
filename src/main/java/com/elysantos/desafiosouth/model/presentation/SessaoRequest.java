@@ -13,7 +13,7 @@ public class SessaoRequest {
   public Sessao toDomain() throws FormatoIncorretoException {
     Sessao sessao;
     try{
-      sessao = new Sessao(this.inicio, this.duracao, pautaID);
+      sessao = Sessao.criarSessao(this.inicio, this.duracao, pautaID);
     }catch (IllegalArgumentException exception){
       throw new FormatoIncorretoException(exception.getMessage());
     }

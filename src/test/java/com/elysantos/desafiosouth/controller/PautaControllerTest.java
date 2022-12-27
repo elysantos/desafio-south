@@ -41,9 +41,9 @@ class PautaControllerTest {
   @Test
   void testCreateASuccessfulPauta() throws Exception {
     PautaRequest request = new PautaRequest();
-    request.setTitle("pauta titulo");
+    request.setTitulo("pauta titulo");
 
-    when(pautaService.criar(any(Pauta.class))).thenReturn(new Pauta(request.getTitle()));
+    when(pautaService.criar(any(Pauta.class))).thenReturn(new Pauta(request.getTitulo()));
 
     MvcResult mvcResult = mockMvc.perform(post(ENDPOINT)
         .contentType(CONTENT_TYPE)
@@ -54,7 +54,7 @@ class PautaControllerTest {
         PautaResponse.class);
 
     assertNotNull(response.getId());
-    assertEquals(response.getTitle(), request.getTitle());
+    assertEquals(response.getTitulo(), request.getTitulo());
 
     verify(pautaService, times(1)).criar(any());
   }

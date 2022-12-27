@@ -13,7 +13,7 @@ public interface SessaoRepository {
   void update(@Param("id") String id, @Param("sessao") Sessao sessao);
   void delete(@Param("id") String id);
   List<Sessao> findAll();
-  Sessao findById(@Param("id") Integer id);
+  Sessao findById(@Param("id") String id);
 
 
   List<Sessao> findByStatusNotClosedAndVotingClosed();

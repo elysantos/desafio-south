@@ -1,9 +1,7 @@
 package com.elysantos.desafiosouth.model.domain;
 
 import java.util.UUID;
-import lombok.Data;
 
-@Data
 public class Pauta {
   private UUID id;
   private String titulo;
@@ -14,6 +12,18 @@ public class Pauta {
   public Pauta(String titulo) {
     this.id = UUID.randomUUID();
     this.titulo = titulo;
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public String getTitulo() {
+    return titulo;
   }
 
 }

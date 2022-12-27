@@ -12,13 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SessaoResponse {
 
+  private String id;
   private PautaResponse    pauta;
   private String           dtInicio;
+  private Integer          duracao;
   private ResultadoVotacao resultado;
 
   public SessaoResponse(Sessao session) {
     this.pauta = new PautaResponse(session.getPauta());
     this.resultado = session.getResultadoVotacao();
+    this.duracao = session.getDuracao();
+    this.id = session.getId().toString();
     this.dtInicio = session.getDateTimeInicio().format(DateTimeFormatter.ISO_DATE_TIME);
 
   }

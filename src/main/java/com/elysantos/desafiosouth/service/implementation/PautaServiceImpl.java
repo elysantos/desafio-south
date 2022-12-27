@@ -6,6 +6,7 @@ import com.elysantos.desafiosouth.model.exception.ItemNaoEncontradoException;
 import com.elysantos.desafiosouth.repository.PautaRepository;
 import com.elysantos.desafiosouth.service.PautaService;
 import java.util.Collection;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,11 +27,17 @@ public class PautaServiceImpl implements PautaService {
 
   @Override
   public Pauta obter(String id) throws ItemNaoEncontradoException {
-    Pauta pauta = pautaRepository.findById(id);
-    if (pauta == null) {
-      throw new ItemNaoEncontradoException(TYPE, String.valueOf(id));
+    try{
+      UUID uuid = UUID.fromString(id);
+      Pauta pauta = pautaRepository.findById(uuid.toString());
+      if (pauta == null) {
+        throw new ItemNaoEncontradoException(TYPE, uuid.toString());
+      }
+      return pauta;
+    }catch (IllegalArgumentException ex){
+      throw new ItemNaoEncontradoException(id, TYPE);
     }
-    return pauta;
+
   }
 
   @Override
@@ -52,9 +59,15 @@ public class PautaServiceImpl implements PautaService {
   }
 
   @Override
-  public Pauta atualizar(Pauta pauta) throws ItemNaoEncontradoException {
-    Pauta pautaAtual = this.obter(pauta.getId().toString());
-    pautaRepository.update(pautaAtual.getId().toString(), pauta);
-    return pauta;
+  public Pauta atualizar(String id, Pauta pauta) throws ItemNaoEncontradoException {
+    try{
+      UUID uuid = UUID.fromString(id);
+      Pauta pautaAtual = this.obter(uuid.toString());
+      pautaRepository.update(pautaAtual.getId().toString(), pauta);
+      return pauta;
+    }catch (IllegalArgumentException ex){
+      throw new ItemNaoEncontradoException(id, TYPE);
+    }
+
   }
 }

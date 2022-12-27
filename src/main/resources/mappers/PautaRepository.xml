@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.elysantos.desafiosouth.repository.PautaRepository">
-    <insert id="insert"></insert>
-    <update id="update"></update>
-    <delete id="delete"></delete>
-    <select id="findAll" resultType="com.elysantos.desafiosouth.model.domain.Pauta"></select>
-    <select id="findById" resultType="com.elysantos.desafiosouth.model.domain.Pauta"></select>
+    <insert id="insert">
+        INSERT INTO pautas (id, titulo) VALUES (#{pauta.id}, '${pauta.titulo}')
+    </insert>
+    <update id="update">
+        update pautas set titulo = '${pauta.titulo}' where id::varchar like #{id}
+    </update>
+    <delete id="delete">
+        delete from pautas where id::varchar like  #{id}
+    </delete>
+    <select id="findAll" resultType="com.elysantos.desafiosouth.model.domain.Pauta">
+        select * from pautas;
+    </select>
+    <select id="findById" resultType="com.elysantos.desafiosouth.model.domain.Pauta">
+        select * from pautas where id::varchar like #{id}
+    </select>
 </mapper>

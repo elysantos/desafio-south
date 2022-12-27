@@ -20,14 +20,10 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    driverClassName: org.h2.Driver
-    password: password
-    url: jdbc:h2:mem:test
-    username: sa
-  h2:
-    console:
-      enabled: true
-      path: /console
+    driverClassName: org.postgresql.Driver
+    password: south
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
 server:
-  port: 9990
-external-validator: http://localhost:808/
+  port: 9898
+external-validator: http://localhost:8080/

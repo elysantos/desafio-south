@@ -11,9 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PautaRequest {
-  private String title;
+  private String titulo;
 
   public Pauta toDomain(){
-    return new Pauta(this.title);
+    return new Pauta(this.titulo);
   }
 }
