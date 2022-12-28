@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: dev
+  sql:
+    init:
+      mode: always
 springdoc:
   description: @description@
   version: @version@
@@ -13,6 +16,7 @@ external-validator: https://user-info.herokyapp.com/users/
 topic:
   name: assembleias-resultados
   bootstrap-server: localhost:9092
+
 ---
 # Configurações de Desenvolvimento
 spring:
@@ -22,7 +26,7 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     password: south
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://pgsql-dev:5432/postgres
     username: postgres
 server:
   port: 9898

@@ -2,6 +2,8 @@ version: '2.1'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:6.1.1
+    networks:
+      - net-desafio
     ports:
       - "2181:2181"
     environment:
@@ -12,6 +14,8 @@ services:
     image: confluentinc/cp-kafka:6.1.1
     depends_on:
       - zookeeper
+    networks:
+      - net-desafio
     ports:
       - '9092:9092'
     expose:
@@ -23,21 +27,41 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
       KAFKA_MIN_INSYNC_REPLICAS: '1'
+
   pgsql-dev:
     image: postgres
+    volumes:
+      - $PWD/.infra/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: south
+    ports:
+      - 5432:5432
+    networks:
+      - net-desafio
+  mock-user-info:
+    image: mock-user-info
+    ports:
+      - 8099:8080
+    networks:
+      - net-desafio
   desafio-south:
     build:
       context: ./
       dockerfile: Dockerfile
     container_name: desafio_south_1
     image: desafio-south-image
+    networks:
+      - net-desafio
     depends_on:
       - pgsql-dev
       - kafka
+      - mock-user-info
     ports:
       - 8080:9898
   init-kafka:
     image: confluentinc/cp-kafka:6.1.1
+    networks:
+      - net-desafio
     depends_on:
       - kafka
     entrypoint: [ '/bin/sh', '-c' ]
@@ -52,3 +76,6 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka:29092 --list
       "
+
+networks:
+  net-desafio: {}

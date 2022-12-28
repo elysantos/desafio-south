@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.elysantos</groupId>
     <artifactId>desafio-south</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.4</version>
     <name>desafio-back-votos</name>
     <description>Documentacao de endpoints do projeto de API de votacao e contabilizacao de votos de assembleia</description>
     <properties>
